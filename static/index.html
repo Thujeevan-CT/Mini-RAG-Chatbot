@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Small RAG Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="bg-scene" aria-hidden="true">
+      <div class="bg-orb bg-orb--1"></div>
+      <div class="bg-orb bg-orb--2"></div>
+      <div class="bg-orb bg-orb--3"></div>
+      <div class="bg-grid"></div>
+    </div>
+
+    <div class="page">
+      <header class="site-header">
+        <div class="site-header__top">
+          <div>
+            <h1>Small RAG Chatbot</h1>
+            <p class="tagline">
+              Upload company PDFs, then ask questions grounded in your docs.
+            </p>
+          </div>
+          <p id="health-status" class="health" aria-live="polite">Checking API…</p>
+          <label class="dev-toggle dev-toggle--header" title="Show sources, chunk previews, and citation text">
+            <span class="dev-toggle__label">Dev mode</span>
+            <input type="checkbox" id="dev-mode-switch" />
+            <span class="dev-toggle__track" aria-hidden="true"></span>
+          </label>
+        </div>
+
+        <nav class="view-nav" aria-label="App sections">
+          <button
+            type="button"
+            class="view-nav__btn is-active"
+            data-view="library"
+            aria-selected="true"
+          >
+            Document library
+          </button>
+          <button
+            type="button"
+            class="view-nav__btn"
+            data-view="chat"
+            aria-selected="false"
+          >
+            Chat
+          </button>
+        </nav>
+      </header>
+
+      <main class="views">
+        <section
+          id="view-library"
+          class="view is-active"
+          role="tabpanel"
+          aria-labelledby="library-heading"
+        >
+          <div class="panel" id="panel-library">
+            <h2 id="library-heading">Document library</h2>
+            <p class="panel-desc" id="library-panel-desc">
+              Upload PDFs to add them to your knowledge base.
+            </p>
+
+            <form id="upload-form" class="upload-form">
+              <div class="file-field">
+                <label for="pdf-file">PDF file</label>
+                <div class="file-input-wrap">
+                  <input
+                    id="pdf-file"
+                    name="file"
+                    type="file"
+                    accept="application/pdf,.pdf"
+                  />
+                  <span id="file-label" class="file-input-label">Choose a PDF…</span>
+                </div>
+              </div>
+              <button type="submit" class="btn" id="upload-btn" disabled>Upload</button>
+              <p id="upload-status" class="upload-status" aria-live="polite"></p>
+            </form>
+
+            <div id="upload-result" class="upload-result upload-result--dev" hidden>
+              <h3>Latest upload (dev)</h3>
+              <ul id="upload-stats" class="stats"></ul>
+              <ul id="chunk-preview" class="chunk-list"></ul>
+            </div>
+
+            <p id="upload-success-actions" class="upload-success-actions" hidden>
+              <button type="button" class="btn btn--ghost" id="go-to-chat">Open Chat</button>
+            </p>
+
+            <div class="doc-library">
+              <div class="doc-library__head">
+                <h3>Your documents</h3>
+                <button type="button" class="btn btn--ghost" id="refresh-docs">Refresh</button>
+              </div>
+              <p id="doc-list-status" class="upload-status" aria-live="polite"></p>
+              <ul id="doc-list" class="doc-list"></ul>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="view-chat"
+          class="view"
+          role="tabpanel"
+          aria-labelledby="chat-heading"
+          hidden
+        >
+          <div class="panel panel--chat">
+            <div class="chat-toolbar">
+              <div>
+                <h2 id="chat-heading">Chat</h2>
+                <p class="panel-desc" id="chat-panel-desc">
+                  Ask questions about your uploaded company documents.
+                </p>
+              </div>
+            </div>
+
+            <div id="chat-log" class="chat-log" aria-live="polite"></div>
+
+            <form id="chat-form" class="chat-composer">
+              <label class="sr-only" for="chat-input">Message</label>
+              <textarea
+                id="chat-input"
+                rows="2"
+                placeholder="Ask about your company docs…"
+              ></textarea>
+              <button type="submit" class="btn" id="chat-send-btn">Send</button>
+              <p id="chat-error" class="chat-error" hidden aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
